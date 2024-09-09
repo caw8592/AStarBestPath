@@ -21,12 +21,19 @@ public class lab1 {
     private static Color OUTOFBOUNDS = new Color(205, 0, 101);
     private static Color PATH = new Color(118, 63, 231);
 
-    private static ArrayList<Double> readElevation(String filename) throws FileNotFoundException {
-        ArrayList<Double> result = new ArrayList<>();
+    private static Double[][] readElevation(String filename) throws FileNotFoundException {
+        Double[][] result = new Double[500][395];
         
         Scanner scanner = new Scanner(new File(filename));
-        while(scanner.hasNextDouble()) {
-            result.add(scanner.nextDouble());
+        int lineNum = 0;
+        while(scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] strings = line.split(" ");
+
+            for(int i = 0; i < strings.length-5; i++) {
+                result[lineNum][i] = Double.parseDouble(strings[i]);
+            }
+            lineNum++;
         }
         scanner.close();
 
@@ -69,13 +76,15 @@ public class lab1 {
     public static void main(String[] args) {
         try {
             String inputImage = args[0];
-            ArrayList<Double> elevations = readElevation(args[1]);
+            Double[][] elevations = readElevation(args[1]);
             ArrayList<Point> points = readPoints(args[2]);
             String outputImage = args[3];
 
-            BufferedImage result = getPath(inputImage, elevations, points);
+            System.out.println(elevations[0][56]);
+
+            //BufferedImage result = getPath(inputImage, elevations, points);
             
-            ImageIO.write(result, "png", new File(outputImage));
+            //ImageIO.write(result, "png", new File(outputImage));
         } catch (FileNotFoundException e) {
             e.printStackTrace();;
         } catch (IOException e) {
