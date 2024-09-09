@@ -48,27 +48,20 @@ public class lab1 {
             this.parent = parent;
         }
     }
-
-    private static ArrayList<ArrayList<Double>> readElevation(String filename) throws FileNotFoundException {
-        ArrayList<ArrayList<Double>> result = new ArrayList<>();
+  
+    private static Double[][] readElevation(String filename) throws FileNotFoundException {
+        Double[][] result = new Double[500][395];
         
         Scanner scanner = new Scanner(new File(filename));
-        ArrayList<Double> temp = null;
+        int lineNum = 0;
         while(scanner.hasNextLine()) {
-            temp = new ArrayList<>();
             String line = scanner.nextLine();
             String[] strings = line.split(" ");
-            for(int i = 0; i < strings.length; i++) {
-                if(strings.length-i != 5) {
-                    temp.add(Double.parseDouble(strings[i]));
-                }
-            }
-            result.add(temp);
-        }
-        scanner.close();
 
-        return result;
-    }
+            for(int i = 0; i < strings.length-5; i++) {
+                result[lineNum][i] = Double.parseDouble(strings[i]);
+            }
+            lineNum++;
 
     private static ArrayList<Point> readPoints(String filename) throws FileNotFoundException {
         ArrayList<Point> result = new ArrayList<>();
