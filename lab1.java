@@ -212,7 +212,7 @@ public class lab1 {
                 inputImage = printPathToImage(inputImage, r);
             }
 
-            System.out.println(totalCost + "m");
+            System.out.println(totalCost + " m");
             ImageIO.write(inputImage, "png", new File(outputImage));
         } catch (FileNotFoundException e) {
             e.printStackTrace();;
