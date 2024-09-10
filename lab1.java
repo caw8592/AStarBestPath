@@ -24,15 +24,15 @@ public class lab1 {
     private static final int FOOTPATH = new Color(0, 0, 0).getRGB();
     private static final int PATH = new Color(118, 63, 231).getRGB();
 
-    private static final int OPENLANDCOST = 1;
-    private static final int ROUGHMEADOWCOST = 400;
+    private static final int OPENLANDCOST = 275;
+    private static final int ROUGHMEADOWCOST = 450;
     private static final int EASYFORESTCOST = 300;
     private static final int SLOWFORESTCOST = 350;
-    private static final int WALKFORESTCOST = 400;
+    private static final int WALKFORESTCOST = 450;
     private static final int IMPASSIBLEVEGCOST = 600;
     private static final int LKESWMPMRSHCOST = 500;
-    private static final int PAVEDROADCOST = 1;
-    private static final int FOOTPATHCOST = 1;
+    private static final int PAVEDROADCOST = 10;
+    private static final int FOOTPATHCOST = 10;
 
     private static double totalCost = 0;
 
