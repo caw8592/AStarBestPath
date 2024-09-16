@@ -28,7 +28,7 @@ public class lab1 {
     private static final int EASYFORESTCOST = 25;
     private static final int SLOWFORESTCOST = 30;
     private static final int WALKFORESTCOST = 50;
-    private static final int LKESWMPMRSHCOST = 100;
+    private static final int LKESWMPMRSHCOST = 200;
     private static final int PAVEDROADCOST = 1;
     private static final int FOOTPATHCOST = 1;
 
@@ -172,18 +172,23 @@ public class lab1 {
                         int rgb = image.getRGB((int) p.getX(), (int) p.getY());
                         int x = (int) p.getX();
                         int y = (int) p.getY();
+                        double elevationDiff = elevations[(int) point.point.getX()][(int) point.point.getY()] - elevations[x][y];
 
                         // Gets the distance traveled to the point
                         double pixelDist = 0;
-                        if(p.getX() != point.point.getX()) {
-                            pixelDist += 10.29;
-                        }
-                        if(p.getY() != point.point.getY()) {
-                            pixelDist += 7.55;
+                        if(p.getX() != point.point.getX() && p.getY() != point.point.getY()) {
+                            pixelDist = Math.sqrt(Math.pow(10.29, 2) + Math.pow(7.55, 2) + Math.pow((elevationDiff), 2));
+                        } else {
+                            if(p.getX() != point.point.getX()) {
+                                pixelDist = Math.sqrt(Math.pow(10.29, 2) + Math.pow((elevationDiff), 2));
+                            }
+                            if(p.getY() != point.point.getY()) {
+                                pixelDist = Math.sqrt(Math.pow(7.55, 2) + Math.pow((elevationDiff), 2));
+                            }
                         }
 
                         // Finds the cost to get to the next point
-                        double newPointCost = point.cost + pixelDist + elevations[x][y];
+                        double newPointCost = point.cost + pixelDist;
 
                         // Adds the point to the queue based on the rgb of the pixel, if its impassible vegetation or out of bounds, the point isn't considered
                         if(rgb == OPENLAND) {
