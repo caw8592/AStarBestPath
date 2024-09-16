@@ -89,14 +89,14 @@ public class lab1 {
     }
 
     // Gets the heuristic (just finds the distance between the two points)
-    private static double getHeuristic(Point p1, Point p2) {
-        Double x1 = p1.getX();
-        Double x2 = p2.getX();
-        Double y1 = p1.getY();
-        Double y2 = p2.getY();
+    private static double getHeuristic(Point p1, Point p2, Double[][] elevations) {
+        int x1 = (int) p1.getX();
+        int x2 = (int) p2.getX();
+        int y1 = (int) p1.getY();
+        int y2 = (int) p2.getY();
         
         // Distance formula
-        return Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2));
+        return Math.sqrt(Math.pow((x2-x1), 2) + Math.pow((y2-y1), 2) + Math.pow(elevations[x1][y1] - elevations[x2][y2], 2));
     }
 
     // Prints all the paths from the final points
@@ -144,7 +144,6 @@ public class lab1 {
         while (queue.size() != 0) {
             // Gets the next best (least weighted) point from the queue
             WeightedPoint point = queue.remove();
-
             // If the current point is the solution, the optimal path has been reached
             if(point.point.getX() == finPoint.getX() && point.point.getY() == finPoint.getY()) {
                 return point;
@@ -167,7 +166,6 @@ public class lab1 {
                     // Makes sure the point is on the image (doesn't go out of bounds)
                     if(p.getX() < image.getWidth() && p.getX() >= 0 &&  p.getY() < image.getHeight() && p.getY() >= 0) {
                         seen.add(p);
-
                         // Gets the color of the new point as well as the x and y values
                         int rgb = image.getRGB((int) p.getX(), (int) p.getY());
                         int x = (int) p.getX();
@@ -192,28 +190,28 @@ public class lab1 {
 
                         // Adds the point to the queue based on the rgb of the pixel, if its impassible vegetation or out of bounds, the point isn't considered
                         if(rgb == OPENLAND) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + OPENLANDCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + OPENLANDCOST, point, newPointCost));
                         }
                         if(rgb == ROUGHMEADOW) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + ROUGHMEADOWCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + ROUGHMEADOWCOST, point, newPointCost));
                         }
                         if(rgb == EASYFOREST) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + EASYFORESTCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + EASYFORESTCOST, point, newPointCost));
                         }
                         if(rgb == SLOWFOREST) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + SLOWFORESTCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + SLOWFORESTCOST, point, newPointCost));
                         }
                         if(rgb == WALKFOREST) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + WALKFORESTCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + WALKFORESTCOST, point, newPointCost));
                         }
                         if(rgb == LKESWMPMRSH) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + LKESWMPMRSHCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + LKESWMPMRSHCOST, point, newPointCost));
                         }
                         if(rgb == PAVEDROAD) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + PAVEDROADCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + PAVEDROADCOST, point, newPointCost));
                         }
                         if(rgb == FOOTPATH) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint) + newPointCost + FOOTPATHCOST, point, newPointCost));
+                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + FOOTPATHCOST, point, newPointCost));
                         }
                     }
                 }
@@ -232,7 +230,7 @@ public class lab1 {
             String outputImage = args[3];
 
             ArrayList<WeightedPoint> result = new ArrayList<>();
-
+            Long start = System.currentTimeMillis();
             // Goes through all the point-pairs
             for(int i = 0; i < points.size()-1; i++) {
                 Point currentPoint = points.get(i);
@@ -241,7 +239,7 @@ public class lab1 {
 
                 result.add(getPath(inputImage, elevations, currentPoint, nextPoint));     
             }
-
+            System.out.println("Path found: " + (System.currentTimeMillis()-start));
             // prints the resulting points to the image and prints the total distance to sys. out
             printPathToImage(inputImage, outputImage, result);
         } catch (FileNotFoundException e) {
