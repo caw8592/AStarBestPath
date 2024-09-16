@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.HashMap;
 
 public class lab1 {
     private static final int OPENLAND = new Color(248, 148, 18).getRGB();
@@ -122,20 +121,8 @@ public class lab1 {
 
     // Finds the final weighted point in the path
     private static WeightedPoint getPath(BufferedImage image, Double[][] elevations, Point currPoint, Point finPoint) throws IOException {
-        
-        // Creates a priority queue and compares the weights of the points
-        PriorityQueue<WeightedPoint> queue = new PriorityQueue<>(new Comparator<WeightedPoint>() {
-            @Override
-            public int compare(WeightedPoint x, WeightedPoint y) {
-                if(x.weight < y.weight) {
-                    return -1;
-                } else
-                    return 1;
-            }
-        });
-
-        // Adds the first point to the queue with no weight or cost
-        queue.add(new WeightedPoint(currPoint, 0, null, 0));
+        HashMap<Double, WeightedPoint> queue = new HashMap<>();
+        queue.put(0.0, new WeightedPoint(currPoint, 0.0, null, 0));
 
         // A seen list because without one java runs out of heap space.
         ArrayList<Point> seen = new ArrayList<>();
@@ -143,7 +130,12 @@ public class lab1 {
         // Keeps going until a solution is found, or there are no more viable points in the image
         while (queue.size() != 0) {
             // Gets the next best (least weighted) point from the queue
-            WeightedPoint point = queue.remove();
+            double best = 1000000000;
+            for(Double key: queue.keySet()) {
+                if(key < best)
+                    best = key;
+            }
+            WeightedPoint point = queue.get(best);
             // If the current point is the solution, the optimal path has been reached
             if(point.point.getX() == finPoint.getX() && point.point.getY() == finPoint.getY()) {
                 return point;
@@ -190,28 +182,36 @@ public class lab1 {
 
                         // Adds the point to the queue based on the rgb of the pixel, if its impassible vegetation or out of bounds, the point isn't considered
                         if(rgb == OPENLAND) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + OPENLANDCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + OPENLANDCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));
                         }
                         if(rgb == ROUGHMEADOW) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + ROUGHMEADOWCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + ROUGHMEADOWCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));                        
                         }
                         if(rgb == EASYFOREST) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + EASYFORESTCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + EASYFORESTCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));                        
                         }
                         if(rgb == SLOWFOREST) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + SLOWFORESTCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + SLOWFORESTCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));                        
                         }
                         if(rgb == WALKFOREST) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + WALKFORESTCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + WALKFORESTCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));                        
                         }
                         if(rgb == LKESWMPMRSH) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + LKESWMPMRSHCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + LKESWMPMRSHCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));                        
                         }
                         if(rgb == PAVEDROAD) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + PAVEDROADCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + PAVEDROADCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));                        
                         }
                         if(rgb == FOOTPATH) {
-                            queue.add(new WeightedPoint(p, getHeuristic(p, finPoint, elevations) + newPointCost + FOOTPATHCOST, point, newPointCost));
+                            Double cost = getHeuristic(p, finPoint, elevations) + newPointCost + FOOTPATHCOST;
+                            queue.put(cost, new WeightedPoint(p, cost, point, newPointCost));                        
                         }
                     }
                 }
