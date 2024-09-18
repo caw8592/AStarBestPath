@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 
 public class lab1 {
@@ -138,7 +139,7 @@ public class lab1 {
         queue.add(new WeightedPoint(currPoint, 0, null, 0));
 
         // A seen list because without one java runs out of heap space.
-        ArrayList<Point> seen = new ArrayList<>();
+        HashSet<Point> seen = new HashSet<>();
 
         // Keeps going until a solution is found, or there are no more viable points in the image
         while (queue.size() != 0) {
