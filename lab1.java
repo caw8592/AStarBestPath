@@ -23,12 +23,12 @@ public class lab1 {
     private static final int FOOTPATH = new Color(0, 0, 0).getRGB();
     private static final int PATH = new Color(118, 63, 231).getRGB();
 
-    private static final int OPENLANDCOST = 1;
-    private static final int ROUGHMEADOWCOST = 50;
-    private static final int EASYFORESTCOST = 25;
-    private static final int SLOWFORESTCOST = 30;
-    private static final int WALKFORESTCOST = 50;
-    private static final int LKESWMPMRSHCOST = 200;
+    private static final int OPENLANDCOST = 50;
+    private static final int ROUGHMEADOWCOST = 300;
+    private static final int EASYFORESTCOST = 100;
+    private static final int SLOWFORESTCOST = 250;
+    private static final int WALKFORESTCOST = 300;
+    private static final int LKESWMPMRSHCOST = 500;
     private static final int PAVEDROADCOST = 1;
     private static final int FOOTPATHCOST = 1;
 
@@ -170,6 +170,8 @@ public class lab1 {
                         int rgb = image.getRGB((int) p.getX(), (int) p.getY());
                         int x = (int) p.getX();
                         int y = (int) p.getY();
+
+                        // Gets the difference in elevations
                         double elevationDiff = elevations[(int) point.point.getX()][(int) point.point.getY()] - elevations[x][y];
 
                         // Gets the distance traveled to the point
@@ -230,16 +232,15 @@ public class lab1 {
             String outputImage = args[3];
 
             ArrayList<WeightedPoint> result = new ArrayList<>();
-            Long start = System.currentTimeMillis();
+
             // Goes through all the point-pairs
             for(int i = 0; i < points.size()-1; i++) {
                 Point currentPoint = points.get(i);
                 Point nextPoint = points.get(i+1);
-            
 
                 result.add(getPath(inputImage, elevations, currentPoint, nextPoint));     
             }
-            System.out.println("Path found: " + (System.currentTimeMillis()-start));
+
             // prints the resulting points to the image and prints the total distance to sys. out
             printPathToImage(inputImage, outputImage, result);
         } catch (FileNotFoundException e) {
